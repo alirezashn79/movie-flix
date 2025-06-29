@@ -2,6 +2,11 @@
   "expo": {
     "name": "movie-sandbox",
     "slug": "movie-sandbox",
+    "assetBundlePatterns": [
+      "./assets/fonts/Vazirmatn-Regular.ttf",
+      "./assets/fonts/Vazirmatn-Light.ttf",
+      "./assets/fonts/Vazirmatn-Bold.ttf"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
