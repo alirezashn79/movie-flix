@@ -3,11 +3,11 @@ import React from "react";
 import { Image, TextInput, View } from "react-native";
 
 interface IProps {
-  onPress: () => void;
+  onPress?: () => void;
   placeholder: string;
 }
 
-export default function SearchBar({}: IProps) {
+export default function SearchBar({ onPress, placeholder }: IProps) {
   return (
     <View className="h-14 flex-row-reverse items-center rounded-full bg-dark-100 px-4">
       <Image
@@ -16,10 +16,10 @@ export default function SearchBar({}: IProps) {
         className="ml-2 size-5"
       />
       <TextInput
-        onPress={() => {}}
+        onPress={onPress}
         value=""
         onChangeText={() => {}}
-        placeholder="جستجو در بیش از ۳۰۰ فیلم آنلاین"
+        placeholder={placeholder}
         placeholderTextColor="#A8B5DB"
         className="flex-1"
         style={{

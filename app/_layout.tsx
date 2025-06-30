@@ -1,9 +1,9 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../styles/globals.css";
-
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -12,6 +12,8 @@ export default function RootLayout() {
     "Vazir-Light": require("../assets/fonts/Vazirmatn-Light.ttf"),
     "Vazir-Bold": require("../assets/fonts/Vazirmatn-Bold.ttf"),
   });
+
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -22,15 +24,18 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        statusBarStyle: "light",
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="movies/[id]" />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          statusBarStyle: "light",
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="movies/[id]" />
+      </Stack>
+    </QueryClientProvider>
   );
 }

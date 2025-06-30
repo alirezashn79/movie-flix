@@ -37,21 +37,10 @@ export default function MainLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="profile"
         options={{
           tabBarIcon: ({ focused }) => (
-            <Tab title="خانه" icon={icons.home} focused={focused} />
-          ),
-          tabBarButton: (props) => (
-            <TabBarButton {...(props as PressableProps)} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Tab title="جستجو" icon={icons.search} focused={focused} />
+            <Tab title="پروفایل" icon={icons.person} focused={focused} />
           ),
           tabBarButton: (props) => (
             <TabBarButton {...(props as PressableProps)} />
@@ -69,11 +58,23 @@ export default function MainLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="profile"
+        name="search"
         options={{
           tabBarIcon: ({ focused }) => (
-            <Tab title="پروفایل" icon={icons.person} focused={focused} />
+            <Tab title="جستجو" icon={icons.search} focused={focused} />
+          ),
+          tabBarButton: (props) => (
+            <TabBarButton {...(props as PressableProps)} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Tab title="خانه" icon={icons.home} focused={focused} />
           ),
           tabBarButton: (props) => (
             <TabBarButton {...(props as PressableProps)} />
