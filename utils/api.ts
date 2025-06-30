@@ -5,6 +5,9 @@ export const TMDBApi = ky.create({
   headers: {
     Authorization: `Bearer ${process.env.EXPO_PUBLIC_TMDB_API_KEY}`,
   },
+  searchParams: {
+    language: "fa-IR",
+  },
   timeout: 10000,
   retry: 2,
 });
