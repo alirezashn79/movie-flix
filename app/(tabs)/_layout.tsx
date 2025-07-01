@@ -8,6 +8,7 @@ import { PressableProps } from "react-native";
 export default function MainLayout() {
   return (
     <Tabs
+      initialRouteName="index"
       screenOptions={{
         sceneStyle: {
           backgroundColor: "#030014",

@@ -5,8 +5,8 @@ import { icons } from "@/constants/icons";
 import useGetMovies from "@/hooks/queries/useGetMovies";
 import { useScrollToTopOnTabPress } from "@/hooks/useScrollToTopOnTabPress";
 import { Movie } from "@/interfaces/interfaces";
-import { useRouter } from "expo-router";
-import React, { useCallback, useMemo } from "react";
+import { useDebounce } from "@uidotdev/usehooks";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,9 +16,11 @@ import {
   View,
 } from "react-native";
 
-export default function PopularMovies() {
+export default function SearchMovies() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const debounceSearchQuery = useDebounce(searchQuery, 300);
   const flatListRef = useScrollToTopOnTabPress<Movie>();
-  const router = useRouter();
+
   const {
     data,
     isPending,
@@ -30,13 +32,10 @@ export default function PopularMovies() {
     isRefetching,
   } = useGetMovies({
     searchParams: {
-      sort_by: "popularity.desc",
+      query: encodeURIComponent(debounceSearchQuery),
     },
+    isSearch: true,
   });
-
-  const navigateToSearchPage = () => {
-    router.push("/search");
-  };
 
   const loadMore = () => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
@@ -48,7 +47,7 @@ export default function PopularMovies() {
 
   const movies = data?.pages.flatMap((page) => page.results) ?? [];
 
-  const renderFooter = () => {
+  const renderFooter = useMemo(() => {
     if (!isFetchingNextPage) return null;
     return (
       <View className="h-36 flex-row items-start justify-center gap-2 pt-4">
@@ -58,35 +57,39 @@ export default function PopularMovies() {
         <ActivityIndicator size="small" />
       </View>
     );
-  };
+  }, [isFetchingNextPage]);
 
   const renderHeader = useMemo(() => {
     return (
       <>
         <Image source={icons.logo} className="mx-auto  mt-20 h-10 w-12" />
-        {isPending ? (
-          <ActivityIndicator className="mx-auto mt-10" size="large" />
-        ) : isError ? (
-          <Text className="mt-10 text-center text-lg font-bold text-red-500">
-            خطا در بارگذاری فیلم ها
-          </Text>
-        ) : (
-          <View className="mt-6">
-            <SearchBar
-              text=""
-              onChangeText={() => {}}
-              placeholder="جستجو در بیش از ۳۰۰ فیلم آنلاین"
-              onPress={navigateToSearchPage}
-            />
 
+        <View className="mt-6">
+          <SearchBar
+            autoFocus
+            text={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+            placeholder="جستجو در بیش از ۳۰۰ فیلم آنلاین"
+          />
+
+          {isPending ? (
+            <ActivityIndicator className="mx-auto mt-10" size="large" />
+          ) : isError ? (
+            <Text className="mt-10 text-center text-lg font-bold text-red-500">
+              خطا در بارگذاری فیلم ها
+            </Text>
+          ) : !!movies?.length ? (
             <CustomText className="mb-4 mt-5 text-lg text-white" variant="bold">
-              آخرین فیلم ها
+              نتایج جستجو برای{"  "}
+              <CustomText className="text-xl text-accent" variant="bold">
+                {searchQuery}
+              </CustomText>
             </CustomText>
-          </View>
-        )}
+          ) : null}
+        </View>
       </>
     );
-  }, [isPending, isError]);
+  }, [isPending, isError, searchQuery, movies.length]);
 
   const renderEmpty = useMemo(() => {
     if (!isPending && !isError)

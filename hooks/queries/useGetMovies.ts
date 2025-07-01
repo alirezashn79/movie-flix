@@ -6,13 +6,16 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 interface UseGetMoviesParams {
   searchParams?: Record<string, string>;
+  isSearch?: boolean;
 }
 
 async function queryFn(
   searchParams?: Record<string, string>,
   pageParams: number = 1,
+  isSearch: boolean = false,
 ): Promise<MovieResponse> {
-  return TMDBApi.get<MovieResponse>(endpoints.tmdb.discover, {
+  const endpoint = isSearch ? endpoints.tmdb.search : endpoints.tmdb.discover;
+  return TMDBApi.get<MovieResponse>(endpoint, {
     searchParams: {
       ...searchParams,
       page: pageParams.toString(),
@@ -22,10 +25,11 @@ async function queryFn(
 
 export default function useGetMovies({
   searchParams = {},
+  isSearch = false,
 }: UseGetMoviesParams) {
   return useInfiniteQuery({
     queryKey: ["popular_movies", stableStringify(searchParams)],
-    queryFn: ({ pageParam }) => queryFn(searchParams, pageParam),
+    queryFn: ({ pageParam }) => queryFn(searchParams, pageParam, isSearch),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,

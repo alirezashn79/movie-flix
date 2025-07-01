@@ -1,3 +1,4 @@
+import { endpoints } from "@/constants/endpoints";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { Link } from "expo-router";
@@ -21,7 +22,7 @@ function MovieCard({
   release_date,
 }: IProps) {
   const imageUri = useMemo(() => {
-    return `https://image.tmdb.org/t/p/w500${poster_path}`;
+    return `${endpoints.tmdb.images}${poster_path}`;
   }, [poster_path]);
 
   return (
