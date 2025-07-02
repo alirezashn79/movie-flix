@@ -1,7 +1,7 @@
 import { endpoints } from "@/constants/endpoints";
-import stableStringify from "@/helpers/stableStringify";
 import { MovieResponse } from "@/interfaces/interfaces";
 import { TMDBApi } from "@/utils/api";
+import stableStringify from "@/utils/stableStringify";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 interface UseGetMoviesParams {

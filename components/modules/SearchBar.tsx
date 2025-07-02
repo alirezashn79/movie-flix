@@ -5,8 +5,8 @@ import { Image, TextInput, TouchableOpacity, View } from "react-native";
 interface IProps {
   onPress?: () => void;
   placeholder: string;
-  text: string;
-  onChangeText: (text: string) => void;
+  text?: string;
+  onChangeText?: (text: string) => void;
   autoFocus?: boolean;
 }
 

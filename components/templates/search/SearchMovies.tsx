@@ -1,9 +1,10 @@
-import CustomText from "@/components/customText";
+import CustomText from "@/components/modules/customText";
 import MovieCard from "@/components/modules/MovieCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/modules/SearchBar";
 import { icons } from "@/constants/icons";
 import useGetMovies from "@/hooks/queries/useGetMovies";
 import { useScrollToTopOnTabPress } from "@/hooks/useScrollToTopOnTabPress";
+import useUpdateSearchCount from "@/hooks/useUpdateSearchCount";
 import { Movie } from "@/interfaces/interfaces";
 import { useDebounce } from "@uidotdev/usehooks";
 import React, { useCallback, useMemo, useState } from "react";
@@ -18,9 +19,8 @@ import {
 
 export default function SearchMovies() {
   const [searchQuery, setSearchQuery] = useState("");
-  const debounceSearchQuery = useDebounce(searchQuery, 300);
+  const debounceSearchQuery = useDebounce(searchQuery, 500);
   const flatListRef = useScrollToTopOnTabPress<Movie>();
-
   const {
     data,
     isPending,
@@ -46,6 +46,11 @@ export default function SearchMovies() {
   }, [refetch]);
 
   const movies = data?.pages.flatMap((page) => page.results) ?? [];
+
+  useUpdateSearchCount({
+    searchQuery: debounceSearchQuery.trim(),
+    movies,
+  });
 
   const renderFooter = useMemo(() => {
     if (!isFetchingNextPage) return null;

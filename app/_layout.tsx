@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { StatusBar } from "react-native";
 import "../styles/globals.css";
 SplashScreen.preventAutoHideAsync();
 
@@ -27,10 +28,10 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <StatusBar hidden={true} animated={true} />
       <Stack
         screenOptions={{
           headerShown: false,
-          statusBarStyle: "light",
         }}
       >
         <Stack.Screen name="(tabs)" />

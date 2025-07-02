@@ -22,6 +22,7 @@ export interface Movie {
 }
 
 interface TrendingMovie {
+  id: string;
   searchTerm: string;
   movie_id: number;
   title: string;

@@ -1,5 +1,5 @@
-import Tab from "@/components/Tab";
-import TabBarButton from "@/components/TabBarButton";
+import Tab from "@/components/modules/Tab";
+import TabBarButton from "@/components/modules/TabBarButton";
 import { icons } from "@/constants/icons";
 import { Tabs } from "expo-router";
 import React from "react";

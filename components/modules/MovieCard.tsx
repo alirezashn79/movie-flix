@@ -4,7 +4,7 @@ import { images } from "@/constants/images";
 import { Link } from "expo-router";
 import React, { useMemo } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import CustomText from "../customText";
+import CustomText from "./customText";
 
 interface IProps {
   id: string;

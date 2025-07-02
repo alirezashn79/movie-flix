@@ -1,8 +1,12 @@
-import CustomText from "@/components/customText";
+import CustomText from "@/components/modules/customText";
+import EmptyList from "@/components/modules/EmptyList";
+import IsError from "@/components/modules/IsError";
+import IsPending from "@/components/modules/IsPending";
 import MovieCard from "@/components/modules/MovieCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/modules/SearchBar";
 import { icons } from "@/constants/icons";
 import useGetMovies from "@/hooks/queries/useGetMovies";
+import { useRefresh } from "@/hooks/useRefresh";
 import { useScrollToTopOnTabPress } from "@/hooks/useScrollToTopOnTabPress";
 import { Movie } from "@/interfaces/interfaces";
 import { useRouter } from "expo-router";
@@ -12,13 +16,14 @@ import {
   FlatList,
   Image,
   RefreshControl,
-  Text,
   View,
 } from "react-native";
+import TrendingMovies from "./TrendingMovies";
 
 export default function PopularMovies() {
   const flatListRef = useScrollToTopOnTabPress<Movie>();
   const router = useRouter();
+  const refreshTrendingMovies = useRefresh(["trending_movies"]);
   const {
     data,
     isPending,
@@ -44,7 +49,8 @@ export default function PopularMovies() {
 
   const onRefresh = useCallback(() => {
     refetch();
-  }, [refetch]);
+    refreshTrendingMovies();
+  }, [refetch, refreshTrendingMovies]);
 
   const movies = data?.pages.flatMap((page) => page.results) ?? [];
 
@@ -65,19 +71,17 @@ export default function PopularMovies() {
       <>
         <Image source={icons.logo} className="mx-auto  mt-20 h-10 w-12" />
         {isPending ? (
-          <ActivityIndicator className="mx-auto mt-10" size="large" />
+          <IsPending />
         ) : isError ? (
-          <Text className="mt-10 text-center text-lg font-bold text-red-500">
-            خطا در بارگذاری فیلم ها
-          </Text>
+          <IsError />
         ) : (
           <View className="mt-6">
             <SearchBar
-              text=""
-              onChangeText={() => {}}
               placeholder="جستجو در بیش از ۳۰۰ فیلم آنلاین"
               onPress={navigateToSearchPage}
             />
+
+            <TrendingMovies />
 
             <CustomText className="mb-4 mt-5 text-lg text-white" variant="bold">
               آخرین فیلم ها
@@ -86,19 +90,6 @@ export default function PopularMovies() {
         )}
       </>
     );
-  }, [isPending, isError]);
-
-  const renderEmpty = useMemo(() => {
-    if (!isPending && !isError)
-      return (
-        <CustomText
-          variant="bold"
-          className="mx-auto mt-10 text-lg text-gray-500"
-        >
-          رکوردی یافت نشد
-        </CustomText>
-      );
-    return null;
   }, [isPending, isError]);
 
   return (
@@ -127,7 +118,9 @@ export default function PopularMovies() {
       onEndReachedThreshold={0.1}
       ListFooterComponent={renderFooter}
       ListHeaderComponent={renderHeader}
-      ListEmptyComponent={renderEmpty}
+      ListEmptyComponent={() => (
+        <EmptyList isPending={isPending} isError={isError} />
+      )}
       refreshControl={
         <RefreshControl
           refreshing={isRefetching}
