@@ -128,6 +128,7 @@ movie-flix/
 
 ## 🙏 Acknowledgments
 
+- [JavaScript Mastery](https://www.youtube.com/@javascriptmastery) Mastery for excellent tutorials and inspiration
 - [TMDB](https://www.themoviedb.org/) for providing free and comprehensive API
 - React Native community for amazing tools and resources
 - All contributors who helped improve this project
